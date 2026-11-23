@@ -1,0 +1,421 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-11-23T12:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v10.0.0",
+  "resources": [
+    {
+      "_id": "wrk_mixte",
+      "_type": "workspace",
+      "parentId": null,
+      "name": "TP MIXTE",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_mixte",
+      "name": "Base Environment",
+      "data": {
+        "host": "localhost"
+      }
+    },
+    {
+      "_id": "fld_movie",
+      "_type": "request_group",
+      "parentId": "wrk_mixte",
+      "name": "1 Movie (GraphQL)",
+      "metaSortKey": 2
+    },
+    {
+      "_id": "req_01",
+      "_type": "request",
+      "parentId": "fld_movie",
+      "name": "01 tous les films",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3200/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"query {\\n  all_movies {\\n    id\\n    title\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 1
+    },
+    {
+      "_id": "req_02",
+      "_type": "request",
+      "parentId": "fld_movie",
+      "name": "02 film par id avec acteurs",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3200/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"query {\\n  movie_with_id(_id: \\\"96798c08-d19b-4986-a05d-7da856efb697\\\") {\\n    title\\n    rating\\n    actors {\\n      firstname\\n      lastname\\n    }\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 2
+    },
+    {
+      "_id": "req_03",
+      "_type": "request",
+      "parentId": "fld_movie",
+      "name": "03 film par titre",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3200/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"query {\\n  movie_with_title(_title: \\\"Creed\\\") {\\n    id\\n    director\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 3
+    },
+    {
+      "_id": "req_04",
+      "_type": "request",
+      "parentId": "fld_movie",
+      "name": "04 ajouter un film",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3200/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"mutation {\\n  add_movie(_id: \\\"6c1e5f3a-9d2b-4c8e-a7f4-2b9d8e1c0a55\\\", _title: \\\"Dune\\\", _director: \\\"Denis Villeneuve\\\", _rate: 8.0) {\\n    id\\n    title\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 4
+    },
+    {
+      "_id": "req_05",
+      "_type": "request",
+      "parentId": "fld_movie",
+      "name": "05 modifier la note",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3200/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"mutation {\\n  update_movie_rate(_id: \\\"6c1e5f3a-9d2b-4c8e-a7f4-2b9d8e1c0a55\\\", _rate: 8.5) {\\n    title\\n    rating\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 5
+    },
+    {
+      "_id": "fld_schedule",
+      "_type": "request_group",
+      "parentId": "wrk_mixte",
+      "name": "2 Schedule (REST)",
+      "metaSortKey": 8
+    },
+    {
+      "_id": "req_06",
+      "_type": "request",
+      "parentId": "fld_schedule",
+      "name": "06 planning complet",
+      "method": "GET",
+      "url": "http://{{ _.host }}:3202/schedule",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 6
+    },
+    {
+      "_id": "req_07",
+      "_type": "request",
+      "parentId": "fld_schedule",
+      "name": "07 films d'une date",
+      "method": "GET",
+      "url": "http://{{ _.host }}:3202/schedule/20151201",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 7
+    },
+    {
+      "_id": "req_08",
+      "_type": "request",
+      "parentId": "fld_schedule",
+      "name": "08 ajouter une date",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3202/schedule/20151206",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"movies\": [\n    \"6c1e5f3a-9d2b-4c8e-a7f4-2b9d8e1c0a55\"\n  ]\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 8
+    },
+    {
+      "_id": "fld_user",
+      "_type": "request_group",
+      "parentId": "wrk_mixte",
+      "name": "3 User (REST)",
+      "metaSortKey": 12
+    },
+    {
+      "_id": "req_09",
+      "_type": "request",
+      "parentId": "fld_user",
+      "name": "09 liste des users (admin)",
+      "method": "GET",
+      "url": "http://{{ _.host }}:3203/users?userid=michael_scott",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 9
+    },
+    {
+      "_id": "req_10",
+      "_type": "request",
+      "parentId": "fld_user",
+      "name": "10 liste des users (refus)",
+      "method": "GET",
+      "url": "http://{{ _.host }}:3203/users?userid=chris_rivers",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 10
+    },
+    {
+      "_id": "req_11",
+      "_type": "request",
+      "parentId": "fld_user",
+      "name": "11 creer un user",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3203/users/jean_dupont",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Jean Dupont\",\n  \"last_active\": 1360031999\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 11
+    },
+    {
+      "_id": "req_12",
+      "_type": "request",
+      "parentId": "fld_user",
+      "name": "12 voir un user",
+      "method": "GET",
+      "url": "http://{{ _.host }}:3203/users/jean_dupont",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 12
+    },
+    {
+      "_id": "req_13",
+      "_type": "request",
+      "parentId": "fld_user",
+      "name": "13 modifier un user",
+      "method": "PUT",
+      "url": "http://{{ _.host }}:3203/users/jean_dupont",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Jean Dupond\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 13
+    },
+    {
+      "_id": "fld_booking",
+      "_type": "request_group",
+      "parentId": "wrk_mixte",
+      "name": "4 Booking (GraphQL)",
+      "metaSortKey": 18
+    },
+    {
+      "_id": "req_14",
+      "_type": "request",
+      "parentId": "fld_booking",
+      "name": "14 reserver",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3201/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"mutation {\\n  add_booking(_userid: \\\"jean_dupont\\\", _date: \\\"20151206\\\", _movieid: \\\"6c1e5f3a-9d2b-4c8e-a7f4-2b9d8e1c0a55\\\") {\\n    userid\\n    dates {\\n      date\\n    }\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 14
+    },
+    {
+      "_id": "req_15",
+      "_type": "request",
+      "parentId": "fld_booking",
+      "name": "15 reserver en double (null)",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3201/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"mutation {\\n  add_booking(_userid: \\\"jean_dupont\\\", _date: \\\"20151206\\\", _movieid: \\\"6c1e5f3a-9d2b-4c8e-a7f4-2b9d8e1c0a55\\\") {\\n    userid\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 15
+    },
+    {
+      "_id": "req_16",
+      "_type": "request",
+      "parentId": "fld_booking",
+      "name": "16 reserver hors planning (null)",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3201/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"mutation {\\n  add_booking(_userid: \\\"jean_dupont\\\", _date: \\\"20151201\\\", _movieid: \\\"6c1e5f3a-9d2b-4c8e-a7f4-2b9d8e1c0a55\\\") {\\n    userid\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 16
+    },
+    {
+      "_id": "req_17",
+      "_type": "request",
+      "parentId": "fld_booking",
+      "name": "17 reservations d'un user avec films",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3201/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"query {\\n  bookings_by_user(_userid: \\\"jean_dupont\\\") {\\n    dates {\\n      date\\n      movies {\\n        title\\n        director\\n        rating\\n      }\\n    }\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 17
+    },
+    {
+      "_id": "req_18",
+      "_type": "request",
+      "parentId": "fld_booking",
+      "name": "18 toutes les reservations",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3201/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"query {\\n  all_bookings {\\n    userid\\n    dates {\\n      date\\n    }\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 18
+    },
+    {
+      "_id": "req_19",
+      "_type": "request",
+      "parentId": "fld_booking",
+      "name": "19 annuler",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3201/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"mutation {\\n  delete_booking(_userid: \\\"jean_dupont\\\", _date: \\\"20151206\\\", _movieid: \\\"6c1e5f3a-9d2b-4c8e-a7f4-2b9d8e1c0a55\\\") {\\n    userid\\n    dates {\\n      date\\n    }\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 19
+    },
+    {
+      "_id": "fld_clean",
+      "_type": "request_group",
+      "parentId": "wrk_mixte",
+      "name": "5 Nettoyage",
+      "metaSortKey": 25
+    },
+    {
+      "_id": "req_20",
+      "_type": "request",
+      "parentId": "fld_clean",
+      "name": "20 supprimer la date",
+      "method": "DELETE",
+      "url": "http://{{ _.host }}:3202/schedule/20151206",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 20
+    },
+    {
+      "_id": "req_21",
+      "_type": "request",
+      "parentId": "fld_clean",
+      "name": "21 supprimer le film",
+      "method": "POST",
+      "url": "http://{{ _.host }}:3200/graphql",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\": \"mutation {\\n  delete_movie(_id: \\\"6c1e5f3a-9d2b-4c8e-a7f4-2b9d8e1c0a55\\\") {\\n    title\\n  }\\n}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 21
+    },
+    {
+      "_id": "req_22",
+      "_type": "request",
+      "parentId": "fld_clean",
+      "name": "22 supprimer le user",
+      "method": "DELETE",
+      "url": "http://{{ _.host }}:3203/users/jean_dupont",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 22
+    }
+  ]
+}
