@@ -1,11 +1,17 @@
 from ariadne import graphql_sync, make_executable_schema, load_schema_from_path, ObjectType, QueryType, MutationType
 from flask import Flask, request, jsonify, make_response
+import json
 
 import resolvers as r
 
 PORT = 3201
 HOST = '0.0.0.0'
 app = Flask(__name__)
+
+# premier lancement : on remplit Mongo avec le json
+if r.bookings.count_documents({}) == 0:
+    with open('{}/data/bookings.json'.format("."), "r") as file:
+        r.bookings.insert_many(json.load(file)['bookings'])
 
 type_defs = load_schema_from_path('booking.graphql')
 query = QueryType()

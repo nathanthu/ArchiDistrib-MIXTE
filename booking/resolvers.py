@@ -1,24 +1,17 @@
-import json
 import requests
+from pymongo import MongoClient
 
 MOVIE_URL = "http://movie:3200"
 SCHEDULE_URL = "http://schedule:3202"
 
-def read():
-    with open('{}/data/bookings.json'.format("."), "r") as file:
-        return json.load(file)['bookings']
-
-def write(bookings):
-    with open('{}/data/bookings.json'.format("."), "w") as file:
-        json.dump({"bookings": bookings}, file)
+# collection "bookings" de la base "booking"
+bookings = MongoClient("mongodb://mongo:27017")["booking"]["bookings"]
 
 def all_bookings(_,info):
-    return read()
+    return list(bookings.find())
 
 def bookings_by_user(_,info,_userid):
-    for booking in read():
-        if booking['userid'] == _userid:
-            return booking
+    return bookings.find_one({"userid": _userid})
 
 # renvoie null si le film n'est pas programme ou deja reserve
 def add_booking(_,info,_userid,_date,_movieid):
@@ -27,14 +20,9 @@ def add_booking(_,info,_userid,_date,_movieid):
     if res.status_code != 200 or _movieid not in res.json()['movies']:
         return None
 
-    bookings = read()
-    booking = None
-    for b in bookings:
-        if b['userid'] == _userid:
-            booking = b
+    booking = bookings.find_one({"userid": _userid})
     if booking is None:
         booking = {"userid": _userid, "dates": []}
-        bookings.append(booking)
 
     day = None
     for d in booking['dates']:
@@ -48,21 +36,22 @@ def add_booking(_,info,_userid,_date,_movieid):
         return None
 
     day['movies'].append(_movieid)
-    write(bookings)
+    # upsert : cree le document s'il n'existe pas
+    bookings.replace_one({"userid": _userid}, booking, upsert=True)
     return booking
 
 # renvoie null si la reservation n'existe pas
 def delete_booking(_,info,_userid,_date,_movieid):
-    bookings = read()
-    for booking in bookings:
-        if booking['userid'] == _userid:
-            for day in booking['dates']:
-                if day['date'] == _date and _movieid in day['movies']:
-                    day['movies'].remove(_movieid)
-                    if not day['movies']:
-                        booking['dates'].remove(day)
-                    write(bookings)
-                    return booking
+    booking = bookings.find_one({"userid": _userid})
+    if booking is None:
+        return None
+    for day in booking['dates']:
+        if day['date'] == _date and _movieid in day['movies']:
+            day['movies'].remove(_movieid)
+            if not day['movies']:
+                booking['dates'].remove(day)
+            bookings.replace_one({"userid": _userid}, booking)
+            return booking
 
 # resolver imbrique : ids des films -> films (GraphQL vers Movie)
 def resolve_movies_in_date(day, info):

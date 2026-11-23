@@ -15,6 +15,12 @@ services:
     depends_on:
       - movie
       - schedule
+      - mongo
+
+  mongo:
+    image: mongo:8
+    volumes:
+      - mongo-data:/data/db
 
   schedule:
     build:
@@ -29,3 +35,6 @@ services:
       dockerfile: user/Dockerfile
     ports:
       - "3203:3203"
+
+volumes:
+  mongo-data:
