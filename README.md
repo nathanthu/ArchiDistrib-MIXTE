@@ -1,23 +1,35 @@
-# UE-AD-A1-MIXTE
+# TP MIXTE
 
-Pour la première partie ne vous souciez pas des fichiers Docker, cela sera abordé par la suite en séance 4.
+| Service  | Port | API     | Données | Appelle                          |
+|----------|------|---------|---------|----------------------------------|
+| Movie    | 3200 | GraphQL | json    |                                  |
+| Booking  | 3201 | GraphQL | MongoDB | Movie (GraphQL), Schedule (REST) |
+| Schedule | 3202 | REST    | json    |                                  |
+| User     | 3203 | REST    | json    |                                  |
 
-Pour installer les libs : 
+gRPC n'a pas été vu en cours, Schedule reste donc en REST.
+
+## Lancer
 
 ```sh
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+docker compose up --build
 ```
 
-A chaque nouveau terminal :
+Remettre les données à zéro :
 
 ```sh
-source .venv/bin/activate
+docker compose down -v
 ```
 
-Pour lancer le dev (en étant dans le même dossier que x.py) :
+## Tester
+
+Importer `insomnia.json` dans Insomnia et dérouler les requêtes dans l'ordre.
+
+Ou en ligne de commande :
 
 ```sh
-python3 xxx.py
+curl -X POST localhost:3201/graphql -H "Content-Type: application/json" \
+  -d '{"query": "{ bookings_by_user(_userid: \"chris_rivers\") { dates { date movies { title } } } }"}'
+
+curl localhost:3202/schedule/20151201
 ```
