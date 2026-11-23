@@ -1,8 +1,8 @@
 import json
 import requests
 
-MOVIE_URL = "http://localhost:3200"
-SCHEDULE_URL = "http://localhost:3202"
+MOVIE_URL = "http://movie:3200"
+SCHEDULE_URL = "http://schedule:3202"
 
 def read():
     with open('{}/data/bookings.json'.format("."), "r") as file:
